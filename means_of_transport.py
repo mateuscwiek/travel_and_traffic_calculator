@@ -139,9 +139,9 @@ class Car(MeansOfTransport):
         :param daily_distance: The daily distance traveled.
         :return: The annual travel cost.
         """
-        daily_fuel_consumption = (daily_distance / 100) * self.AVG_FUEL_CONSUMPTION
+        daily_fuel_consumption = (daily_distance / 100) * self.avg_consumption
         annual_fuel_consumption = daily_fuel_consumption * 365
-        annual_travel_cost = annual_fuel_consumption * self.AVG_FUEL_PRICE[self.fuel_type]
+        annual_travel_cost = annual_fuel_consumption * self.avg_consumption
         return annual_travel_cost
 
     def calculate_annual_co2_emission(self, daily_distance: float) -> float:
@@ -153,7 +153,7 @@ class Car(MeansOfTransport):
         """
         daily_fuel_consumption = (daily_distance / 100) * self.avg_consumption
         annual_fuel_consumption = daily_fuel_consumption * 365
-        annual_co2_emission = annual_fuel_consumption * self.CO2_EMISSION[self.fuel_type]
+        annual_co2_emission = annual_fuel_consumption * self.config.co2_emission[self.fuel_type]
         return annual_co2_emission
 
     def annual_summary(self, daily_distance):
