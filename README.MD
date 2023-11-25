@@ -31,8 +31,16 @@
     - **Get Current Traffic Data**: 
         - Endpoint: `http://localhost:5000/get_current_traffic`
         - Method: `GET`
-        - Response: JSON with current traffic data.
-
+          - Response: JSON with current traffic data.
+   -    **Get Annual Saving Summary**: 
+        - Endpoint: `http://localhost:5000/get_annual_saving`
+        - Method: `GET`
+        - Parameters:
+            - `avg_consumption` (float, optional): Average fuel consumption in liters per 100 km for a car.
+            - `fuel_type` (integer, optional): Fuel type (0 for gasoline, 1 for diesel) for a car.
+            - `daily_distance` (float, optional): The daily distance traveled for a car.
+        - Response: JSON with annual cost and CO2 emission savings.
+        
     - **Get Saving for Travel**: 
         - Endpoint: `http://localhost:5000/get_saving_for_travel`
         - Method: `GET`
@@ -42,16 +50,11 @@
             - `avg_consumption` (float, optional): Average fuel consumption in liters per 100 km for a car.
             - `fuel_type` (integer, optional): Fuel type (0 for gasoline, 1 for diesel) for a car.
             - `fuel_price` (float, optional): Fuel price per liter for a car.
-        - Response: JSON with cost and CO2 emission savings.
+            - `lon` (float, optional): Longitude coordinate for paid parking calculation.
+            - `lat` (float, optional): Latitude coordinate for paid parking calculation.
+      - Response: JSON with cost and CO2 emission savings
 
-    - **Get Annual Saving Summary**: 
-        - Endpoint: `http://localhost:5000/get_annual_saving`
-        - Method: `GET`
-        - Parameters:
-            - `avg_consumption` (float, optional): Average fuel consumption in liters per 100 km for a car.
-            - `fuel_type` (integer, optional): Fuel type (0 for gasoline, 1 for diesel) for a car.
-            - `daily_distance` (float, optional): The daily distance traveled for a car.
-        - Response: JSON with annual cost and CO2 emission savings.
+
 
 
 ## How it works
