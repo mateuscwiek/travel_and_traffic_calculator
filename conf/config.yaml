@@ -62,6 +62,23 @@ paid_parking:
       III: 3
       IV: 3
 
+air_pollution:
+  default_sensor_id: 10125 #sensor umieszczony na ulicy piłsudskiego w Rzeszowie, jezeli brak wspolrzednych uzywany jako domyslny
+  sensor_list_data: "air_quality/data/sensors.json"
+  air_pollution_url: "https://api.gios.gov.pl/pjp-api/rest/aqindex/getIndex/"
+  air_index_key: "stIndexLevel"
+  index_level: "indexLevelName"
+  extra_points: #rules for extra points based on air quality
+    0: 0
+    1: 0
+    2: 50
+    3: 100
+    4: 150
+    5: 200
+  params:
+    lat: "lat"
+    lon: "lon"
+
 
 
 traffic:

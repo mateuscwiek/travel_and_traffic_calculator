@@ -54,8 +54,23 @@
             - `lat` (float, optional): Latitude coordinate for paid parking calculation.
       - Response: JSON with cost and CO2 emission savings
 
-
-
+      - **Get Air Quality**:
+          - Endpoint: `http://localhost:5000/get_air_quality`
+          - Method: `GET`
+          - Parameters:
+              - `lat` (float): Latitude of the location.
+              - `lon` (float): Longitude of the location.
+          - Response: JSON with air quality data
+            Example:
+            ```json
+            {
+              "air_quality": "Dobry",
+              "air_quality_id": 1,
+              "extra_points": 0
+            }
+            ```
+            where 'air_quality' represents the air quality level and 'air_quality_id'
+            ranges from 0 (best) to 5 (worst). 'extra_points' depends of air quality worse = more points
 
 ## How it works
 
@@ -144,3 +159,11 @@ Data were saved in csv:
 
 We provide function to calculate current traffic (value from 0 to 1) based on specific hour and weekday.
 This normalized traffic volume is used as score ratio. 
+
+
+3. Air quality - extra points
+
+Because we want to encourage users to use communication, especially when the air quality is poor, or to engage in outdoor activities when the weather is good. 
+Based on the API "https://powietrze.gios.gov.pl/pjp/content/api," we have prepared an analysis of air quality for a specific location 
+(if no location is provided, the default is the air quality for Piłsudskiego Street in Rzeszów). 
+The endpoint returns information about air quality based on the nearest sensor in the area and extra points for using public transport.

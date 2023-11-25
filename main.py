@@ -5,6 +5,7 @@ import pandas as pd
 from paid_parking_zones.calculator import PaidParkingZones
 from hydra import initialize, compose
 from datetime import datetime
+from air_quality.air_data import AirQuality
 
 app = Flask(__name__)
 initialize(version_base=None, config_path="conf", job_name="test")
@@ -12,6 +13,7 @@ config = compose(config_name='config')
 
 df = pd.read_csv(config.traffic.average_traffic_file)
 ppz = PaidParkingZones(config)
+air_quality = AirQuality(config)
 
 @app.route('/get_traffic', methods=['GET'])
 def get_traffic():
@@ -105,5 +107,35 @@ def get_annual_saving_summary():
         return jsonify({'error': 'Invalid data or missing keys'}), 404
 
 
+
+@app.route('/get_air_quality', methods=['GET'])
+def get_air_quality():
+    """
+    Endpoint for retrieving air quality data based on provided latitude and longitude.
+
+    Query Parameters:
+    - lat (float): Latitude of the location.
+    - lon (float): Longitude of the location.
+
+    Returns:
+    - JSON: Air quality data in the specified format.
+      Example:
+      {
+        "air_quality": "Dobry",
+        "air_quality_id": 1,
+        "extra_points" : 0
+      }
+      where 'air_quality' represents the air quality level and 'air_quality_id'
+      ranges from 0 (best) to 5 (worst).
+    """
+    lat = request.args.get(config.air_pollution.params.lat, None)
+    lon = request.args.get(config.air_pollution.params.lon, None)
+
+    # Get air quality data based on provided coordinates if None we teke dafault for Rzeszów
+    result = air_quality.get_air_quality(lat, lon)
+
+    # Check if the result is not None
+    if result is not None:
+        return jsonify(result)
 if __name__ == '__main__':
     app.run(debug=True)
