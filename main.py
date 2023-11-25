@@ -29,8 +29,10 @@ def get_traffic():
 
     if result.empty:
         return jsonify({"error": "No data found for the provided parameters."}), 404
-
-    return jsonify(result.to_dict(orient='records'))
+    traffic_result = {
+        config.traffic.traffic_result: round(result.values[0][0],2)
+    }
+    return jsonify(traffic_result)
 
 
 @app.route('/get_current_traffic', methods=['GET'])
