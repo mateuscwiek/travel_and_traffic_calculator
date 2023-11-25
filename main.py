@@ -45,8 +45,10 @@ def get_current_traffic():
 
     if result.empty:
         return jsonify({"error": "No data found for the current time."}), 404
-
-    return jsonify(result.to_dict(orient='records'))
+    traffic_result = {
+        config.traffic.traffic_result: round(result.values[0][0],2)
+    }
+    return jsonify(traffic_result)
 
 
 @app.route('/get_saving_for_travel', methods=['GET'])
