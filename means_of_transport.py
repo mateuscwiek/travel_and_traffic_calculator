@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-
+from  paid_parking_zones.calculator import PaidParkingZones
 class MeansOfTransportRegistry:
     _registry = {}
 
@@ -109,17 +109,27 @@ class Car(MeansOfTransport):
         emission = total_fuel_consumption * self.emission
         return emission
 
-    def calculate_travel_cost(self, distance: float, fuel_price_per_liter: float | None) -> float:
+    def calculate_travel_cost(self, distance: float, fuel_price_per_liter: float | None,
+                              lon: float | None, lat: float | None, ppd: PaidParkingZones) -> float:
         """
         Calculate the travel cost for a car trip.
 
         :param distance: The distance of the trip.
         :param fuel_price_per_liter: Fuel price per liter (if None, use average fuel price).
+        :param lon: Longitude coordinate of the destination.
+        :param lat: Latitude coordinate of the destination.
+        :param ppd: Instance of PaidParkingZones for checking paid parking zones.
+
         :return: The travel cost for the trip.
         """
         fuel_consumption_for_trip = (distance / 100) * self.avg_consumption
-        fpl = self.config.default_avg_fuel_price[self.fuel_type] if fuel_price_per_liter is None else float(fuel_price_per_liter)
+        fpl = self.config.default_avg_fuel_price[self.fuel_type] if fuel_price_per_liter is None else float(
+            fuel_price_per_liter)
         travel_cost = fuel_consumption_for_trip * fpl
+        if lat is not None and lon is not None:
+            # Include the cost of paid parking if coordinates are provided
+            travel_cost += ppd.check_price(latitude=lat, longitude=lon)
+
         return travel_cost
 
     def calculate_annual_travel_cost(self, daily_distance: float) -> float:
@@ -158,7 +168,7 @@ class Car(MeansOfTransport):
             'co2': self.calculate_annual_co2_emission(float(daily_distance))
         }
 
-    def cost_summary(self, distance, fuel_price):
+    def cost_summary(self, distance, fuel_price, lon, lat ,ppd):
         """
         Calculate the cost and CO2 emission summary for a car.
 
@@ -167,7 +177,8 @@ class Car(MeansOfTransport):
         :return: A dictionary with 'cost' and 'co2' keys.
         """
         return {
-            'cost': self.calculate_travel_cost(distance=distance, fuel_price_per_liter=fuel_price),
+            'cost': self.calculate_travel_cost(distance=distance, fuel_price_per_liter=fuel_price,
+                                               lon=lon, lat= lat ,ppd=ppd),
             'co2': self.calculate_carbon_footprint(distance=distance)
         }
 
@@ -196,6 +207,22 @@ class Walking(MeansOfTransport):
         return 0
 
 @MeansOfTransportRegistry.register(1)
+class Bike(MeansOfTransport):
+    def __init__(self, config):
+        super().__init__(config)
+        self.config = self.config.bike
+
+
+    def calculate_carbon_footprint(self, distance: float) -> float:
+        return 0
+
+    def calculate_travel_cost(self, distance: float) -> float:
+        driving_time = (distance / self.config.avg_speed)
+        cost = self.config.price_per_hour * driving_time
+        return cost
+
+
+@MeansOfTransportRegistry.register(2)
 class Scooter(MeansOfTransport):
     """
     Class representing a scooter as a means of transport.
@@ -227,3 +254,12 @@ class Scooter(MeansOfTransport):
         energy_consumption = (distance/100) * self.config.avg_consumption
         co2_emission = energy_consumption * self.config.avg_co2_emission
         return co2_emission
+
+@MeansOfTransportRegistry.register(3)
+class BUS(MeansOfTransport):
+
+    def calculate_travel_cost(self, distance: float) -> float:
+        return 0
+
+    def calculate_carbon_footprint(self, distance: float) -> float:
+        return 0

@@ -2,8 +2,9 @@
 means_of_transport:
   types:
     0: "walking"
-    1: "scooter"
-    2: "bus"
+    1: "bike"
+    2: "scooter"
+    3: "bus"
 
   car:
     co2_emission:
@@ -19,6 +20,10 @@ means_of_transport:
     avg_speed: 10 #km/h
     avg_consumption: 0.1 #kWh/100km
     avg_co2_emission: 4 #gCO2/kWh
+
+  bike:
+    price_per_hour: 1 #zł
+    avg_speed: 10 #km/h
 
   params:
     transport_type:
@@ -39,6 +44,24 @@ means_of_transport:
     daily_distance:
       value: "daily_distance"
       default: 25 #avg daily trip for rzeszowian
+    lon:
+      value: "lon"
+      default: null
+    lat:
+      value: "lat"
+      default: null
+
+
+paid_parking:
+  data: "paid_parking_zones/data"
+  input_coordinates_format: "EPSG:4326"
+  output_coordinates_format: "EPSG:2180"
+  parking_price: #for one hour that's our assumption - unit zł
+      I: 5
+      II: 3
+      III: 3
+      IV: 3
+
 
 
 traffic:

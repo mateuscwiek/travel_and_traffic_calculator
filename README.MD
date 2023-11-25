@@ -62,9 +62,36 @@
 
 - Travel cost and CO2 emission savings.
 
-To calculate saving for specific travel we first calculate emission and cost for selected means of transport (walking, scooter or bus)
+To calculate saving for specific travel we first calculate emission and cost for selected means of transport (walking,bike, scooter or bus)
+
+Assumptions for Individual Modes of Transport:
+- **Walking:**
+  - Emission: Zero emission
+  - Cost: Zero cost
+
+- **Bike:**
+  - Emission: Zero emission
+  - Cost: Based on Blinkee pricing in Rzeszów
+
+- **Scooter:**
+  - Emission: Based on the average CO2 emission for scooters (g/kWh/100km)
+  - Cost: Based on Blinkee pricing in Rzeszów
+
+- **Bus:**
+  - Emission: Zero emission (assuming the bus will drive anyway, so as a user, you do not generate a carbon footprint)
+  - Cost: Zero (we assume that the user has a standing ticket). In the next phase, we can also involve ticket pricing.
+
+
 Then we calculate cost and emission for car based on engine type, average fuel consumption and fuel price. 
 Average CO2 emission per 100 km for combustion engines vehicles was taken as average split between gasoline and diesel engine.
+
+We also include paid parking zones in city. Based on .shp files for Rzeszów there is a function which calculate if for 
+specific destination (lat,lng) we are in paid parking zone and what zone ("Podstrefa"). 
+
+![PPZ](paid_parking_zones/images/ppd.png "")
+
+We have pricing for each zone and this value to total price. We assume that user stay 1 hour in paid parking zone.
+
 
 Then we subtract cost for car and selected means of transport to calculate total savings
 

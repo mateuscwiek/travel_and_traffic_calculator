@@ -2,6 +2,7 @@ from flask import Flask, request, jsonify
 from means_of_transport import initialize_means_of_transport, MeansOfTransport, Car
 from utils.utils import *
 import pandas as pd
+from paid_parking_zones.calculator import PaidParkingZones
 from hydra import initialize, compose
 from datetime import datetime
 
@@ -10,7 +11,7 @@ initialize(version_base=None, config_path="conf", job_name="test")
 config = compose(config_name='config')
 
 df = pd.read_csv(config.traffic.average_traffic_file)
-
+ppz = PaidParkingZones(config)
 
 @app.route('/get_traffic', methods=['GET'])
 def get_traffic():
@@ -61,7 +62,8 @@ def get_saving_for_travel():
     car_avg_consumption = request.args.get(cfg_params.avg_consumption.value, cfg_params.avg_consumption.default)
     fuel_type = request.args.get(cfg_params.fuel_type.value, cfg_params.fuel_type.default)
     fuel_price = request.args.get(cfg_params.fuel_price.value, cfg_params.fuel_price.default)
-
+    lon = request.args.get(cfg_params.lon.value,cfg_params.lon.default)
+    lat = request.args.get(cfg_params.lat.value,cfg_params.lat.default)
     # Calculate CO2 and cost for the selected transport type
     transport: MeansOfTransport | None = initialize_means_of_transport(transport_type, config)
 
@@ -71,7 +73,7 @@ def get_saving_for_travel():
     transport_summary_cost = transport.cost_summary(distance)
 
     car_transport = Car(car_avg_consumption, fuel_type, config)
-    car_summary_cost = car_transport.cost_summary(distance, fuel_price)
+    car_summary_cost = car_transport.cost_summary(distance, fuel_price,lon,lat,ppz)
 
     savings = calculate_cost_co2_difference(car_summary_cost, transport_summary_cost)
 
