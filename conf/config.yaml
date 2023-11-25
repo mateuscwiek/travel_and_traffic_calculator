@@ -1,0 +1,50 @@
+
+means_of_transport:
+  types:
+    0: "walking"
+    1: "scooter"
+    2: "bus"
+
+  car:
+    co2_emission:
+      0: 2.3 #for gasoline avg co2 emission
+      1: 2.7  #for diesel
+    default_avg_consumption: 10
+    default_avg_fuel_price:
+      0: 6.52 #for gasoline
+      1: 6.70 #for diesel
+  scooter:
+    start_price: 2.5 #All the data takes from blinkee
+    cost_for_minute: 0.69
+    avg_speed: 10 #km/h
+    avg_consumption: 0.1 #kWh/100km
+    avg_co2_emission: 4 #gCO2/kWh
+
+  params:
+    transport_type:
+      value: "transport_type"
+      default: 2 #bus
+    distance:
+      value: "distance"
+      default: 10
+    avg_consumption:
+      value: "avg_consumption"
+      default: null
+    fuel_type:
+      value: "fuel_type"
+      default: 0 #gasoline
+    fuel_price:
+      value: "fuel_price"
+      default: null
+    daily_distance:
+      value: "daily_distance"
+      default: 25 #avg daily trip for rzeszowian
+
+
+traffic:
+  average_traffic_file: 'traffic_intensity/data/global_avarage_traffic.csv'
+  hour: "Hour"
+  day_of_week: "Week_day"
+  params:
+    hour: "hour"
+    day_of_week: "day_of_week"
