@@ -92,7 +92,7 @@ def get_saving_for_travel():
 @app.route('/get_annual_saving', methods=['GET'])
 def get_annual_saving_summary():
     """
-    Get annual cost and CO2 emission savings for a car.
+    Get annual cost and CO2 emission for a car.
 
     :return: JSON response with annual cost and CO2 emission savings.
     """
@@ -133,7 +133,7 @@ def get_air_quality():
     lat = request.args.get(config.air_pollution.params.lat, None)
     lon = request.args.get(config.air_pollution.params.lon, None)
 
-    # Get air quality data based on provided coordinates if None we teke dafault for Rzeszów
+    # Get air quality data based on provided coordinates if None we teke default for Rzeszów
     result = air_quality.get_air_quality(lat, lon)
 
     # Check if the result is not None

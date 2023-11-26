@@ -85,6 +85,7 @@ class Car(MeansOfTransport):
     """
 
 
+
     def __init__(self, avg_consumption: float | None, fuel_type: int | None, config):
         """
         Initialize the Car instance.
@@ -105,8 +106,7 @@ class Car(MeansOfTransport):
         :param distance: The distance of the trip.
         :return: The CO2 emission for the trip.
         """
-        total_fuel_consumption = (distance / 100) * self.avg_consumption
-        emission = total_fuel_consumption * self.emission
+        emission = distance * self.emission
         return emission
 
     def calculate_travel_cost(self, distance: float, fuel_price_per_liter: float | None,
@@ -165,7 +165,7 @@ class Car(MeansOfTransport):
         """
         return {
             'cost': self.calculate_annual_travel_cost(float(daily_distance)),
-            'co2': self.calculate_annual_co2_emission(float(daily_distance))
+            'co2': self.calculate_annual_co2_emission(float(daily_distance))/1000
         }
 
     def cost_summary(self, distance, fuel_price, lon, lat ,ppd):
